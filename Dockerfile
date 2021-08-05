@@ -137,7 +137,7 @@ RUN /bin/bash -c "source ~/.bashrc"
 # Install pip
 USER root
 RUN apt-get install -y wget python-pip python-dev libgtk2.0-0 unzip libblas-dev liblapack-dev libhdf5-dev && \
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     python get-pip.py
 
 # prepare default python 2.7 environment
