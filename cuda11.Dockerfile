@@ -5,6 +5,9 @@ LABEL maintainer "Henry Huang"
 MAINTAINER Henry Huang "https://github.com/henry2423"
 ENV REFRESHED_AT 2018-10-29
 
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install sudo
 RUN apt-get update && \
     apt-get install -y sudo \
@@ -36,7 +39,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > mic
 
 RUN sudo apt-get install -y apt-transport-https && \
     sudo apt-get update && \
-    sudo apt-get install -y code
+    sudo apt-get install -y code && \
+    sudo apt-get install -y fonts-wqy-microhei ttf-wqy-zenhei
 
 ### VNC Installation
 LABEL io.k8s.description="VNC Container with ROS with Xfce window manager" \
@@ -62,7 +66,7 @@ ENV HOME=/home/$USER \
     NO_VNC_HOME=/home/$USER/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1920x1080 \
+    VNC_RESOLUTION=1600x900 \
     VNC_PW=$VNCPASSWD \
     VNC_VIEW_ONLY=false
 WORKDIR $HOME
@@ -70,6 +74,7 @@ WORKDIR $HOME
 ## Add all install scripts for further steps
 ADD ./src/common/install/ $INST_SCRIPTS/
 ADD ./src/ubuntu/install/ $INST_SCRIPTS/
+ADD ./src/common/novnc/ $INST_SCRIPTS/
 RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
 
 ## Install some common tools
@@ -103,7 +108,7 @@ RUN apt-get update && \
 
 # Install ROS
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list' && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 && \
     curl http://repo.ros2.org/repos.key | sudo apt-key add - && \
     apt-get update && apt-get install -y ros-melodic-desktop && \
     apt-get install -y python-rosinstall 
@@ -133,7 +138,7 @@ RUN /bin/bash -c "source ~/.bashrc"
 # Install pip
 USER root
 RUN apt-get install -y wget python-pip python-dev libgtk2.0-0 unzip libblas-dev liblapack-dev libhdf5-dev && \
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     python get-pip.py
 
 # prepare default python 2.7 environment
