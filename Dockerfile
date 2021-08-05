@@ -5,6 +5,9 @@ LABEL maintainer "Henry Huang"
 MAINTAINER Henry Huang "https://github.com/henry2423"
 ENV REFRESHED_AT 2018-10-29
 
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install sudo
 RUN apt-get update && \
     apt-get install -y sudo \
@@ -36,7 +39,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > mic
 
 RUN sudo apt-get install -y apt-transport-https && \
     sudo apt-get update && \
-    sudo apt-get install -y code
+    sudo apt-get install -y code && \
+    sudo apt-get install -y fonts-wqy-microhei ttf-wqy-zenhei
 
 ### VNC Installation
 LABEL io.k8s.description="VNC Container with ROS with Xfce window manager" \
@@ -103,7 +107,7 @@ RUN apt-get update && \
 
 # Install ROS
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list' && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 && \
     curl http://repo.ros2.org/repos.key | sudo apt-key add - && \
     apt-get update && apt-get install -y ros-melodic-desktop && \
     apt-get install -y python-rosinstall 
