@@ -1,5 +1,5 @@
 # This Dockerfile is used to build an ROS + VNC + Tensorflow image based on Ubuntu 18.04
-FROM nvidia/cuda:11.2.0-cudnn8-runtime-ubuntu18.04
+FROM nvidia/cuda:11.2.0-cudnn8-devel-ubuntu18.04
 
 LABEL maintainer "Henry Huang"
 MAINTAINER Henry Huang "https://github.com/henry2423"
