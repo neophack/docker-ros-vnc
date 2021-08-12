@@ -13,7 +13,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && \
     apt-get install -y sudo \
     xterm \
-    curl
+    curl \
+    meld \
+    && apt-get clean && sudo rm -rf /usr/local/src/* &&  rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* &&  rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 # Configure user
 ARG user=ros
