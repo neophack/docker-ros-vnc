@@ -1,6 +1,6 @@
 # This Dockerfile is used to build an ROS + VNC + Tensorflow image based on Ubuntu 18.04
-#FROM nvidia/cuda:11.2.0-cudnn8-devel-ubuntu18.04
-FROM nvcr.io/nvidia/tensorrt:20.11-py3
+FROM nvidia/cuda:11.1.1-cudnn8-devel-ubuntu18.04
+#FROM nvcr.io/nvidia/tensorrt:20.11-py3
 
 LABEL maintainer "Henry Huang"
 MAINTAINER Henry Huang "https://github.com/henry2423"
@@ -34,14 +34,25 @@ RUN groupadd $USER && \
     groupmod --gid $GID $USER
 
 ### Install VScode
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
-    sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ && \
-    sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+RUN cd /home/$USER/ &&\
+    # Tmp fix to run vs code without no-sandbox: https://github.com/microsoft/vscode/issues/126027
+    wget -q https://az764295.vo.msecnd.net/stable/054a9295330880ed74ceaedda236253b4f39a335/code_1.56.2-1620838498_amd64.deb -O ./vscode.deb &&\
+    # wget -q https://go.microsoft.com/fwlink/?LinkID=760868 -O ./vscode.deb &&\
+    sudo apt-get update &&\
+    sudo apt-get install -y ./vscode.deb &&\
+    sudo rm ./vscode.deb &&\
+    sudo rm /etc/apt/sources.list.d/vscode.list &&\
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
+    
+# Fix permissions on tmp directory
+chmod 1777 /tmp
+# Remove apt lists
+rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 RUN sudo apt-get install -y apt-transport-https && \
     sudo apt-get update && \
-    sudo apt-get install -y code && \
-    sudo apt-get install -y fonts-wqy-microhei ttf-wqy-zenhei
+    sudo apt-get install -y fonts-wqy-microhei ttf-wqy-zenhei &&\
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
 
 ### VNC Installation
 LABEL io.k8s.description="VNC Container with ROS with Xfce window manager" \
@@ -112,14 +123,16 @@ RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" 
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 && \
     curl http://repo.ros2.org/repos.key | sudo apt-key add - && \
     apt-get update && apt-get install -y ros-melodic-desktop && \
-    apt-get install -y python-rosinstall 
+    apt-get install -y python-rosinstall  &&\
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
 
 # Install Gazebo
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
     wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add - && \
     apt-get update && \
     apt-get install -y gazebo9 libgazebo9-dev && \
-    apt-get install -y ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control
+    apt-get install -y ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control &&\
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
 
 
 #install missing rosdep
@@ -144,8 +157,8 @@ RUN apt-get install -y wget python-pip python-dev libgtk2.0-0 unzip libblas-dev 
 
 # prepare default python 2.7 environment
 USER root
-RUN pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.11.0-cp27-none-linux_x86_64.whl && \
-    pip install keras==2.2.4 matplotlib pandas scipy h5py testresources scikit-learn
+RUN pip install --ignore-installed --no-cache-dir --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.11.0-cp27-none-linux_x86_64.whl && \
+    pip install --no-cache-dir keras==2.2.4 matplotlib pandas scipy h5py testresources scikit-learn
 
 # Expose Tensorboard
 EXPOSE 6006
