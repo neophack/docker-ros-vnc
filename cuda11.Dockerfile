@@ -42,17 +42,13 @@ RUN cd /home/$USER/ &&\
     sudo apt-get install -y ./vscode.deb &&\
     sudo rm ./vscode.deb &&\
     sudo rm /etc/apt/sources.list.d/vscode.list &&\
-    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
-    
-# Fix permissions on tmp directory
-chmod 1777 /tmp
-# Remove apt lists
-rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+
 
 RUN sudo apt-get install -y apt-transport-https && \
     sudo apt-get update && \
     sudo apt-get install -y fonts-wqy-microhei ttf-wqy-zenhei &&\
-    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 ### VNC Installation
 LABEL io.k8s.description="VNC Container with ROS with Xfce window manager" \
@@ -124,7 +120,7 @@ RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" 
     curl http://repo.ros2.org/repos.key | sudo apt-key add - && \
     apt-get update && apt-get install -y ros-melodic-desktop && \
     apt-get install -y python-rosinstall  &&\
-    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 # Install Gazebo
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
@@ -132,7 +128,7 @@ RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb
     apt-get update && \
     apt-get install -y gazebo9 libgazebo9-dev && \
     apt-get install -y ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control &&\
-    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 
 #install missing rosdep
