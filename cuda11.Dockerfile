@@ -48,8 +48,8 @@ RUN cd /home/$USER/ &&\
     sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 
-RUN sudo apt-get install -y apt-transport-https && \
-    sudo apt-get update && \
+RUN sudo apt-get update && \
+    sudo apt-get install -y apt-transport-https && \
     sudo apt-get install -y fonts-wqy-microhei ttf-wqy-zenhei &&\
     sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
