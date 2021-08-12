@@ -14,8 +14,9 @@ RUN apt-get update && \
     apt-get install -y sudo \
     xterm \
     curl \
+    wget \
     meld \
-    && apt-get clean && sudo rm -rf /usr/local/src/* &&  rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* &&  rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+    && apt-get clean && rm -rf /usr/local/src/* &&  rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* &&  rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 # Configure user
 ARG user=ros
@@ -155,8 +156,8 @@ RUN apt-get install -y wget python-pip python-dev libgtk2.0-0 unzip libblas-dev 
 
 # prepare default python 2.7 environment
 USER root
-RUN pip install --ignore-installed --no-cache-dir --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.11.0-cp27-none-linux_x86_64.whl && \
-    pip install --no-cache-dir keras==2.2.4 matplotlib pandas scipy h5py testresources scikit-learn
+#RUN pip install --ignore-installed --no-cache-dir --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.11.0-cp27-none-linux_x86_64.whl && \
+#    pip install --no-cache-dir keras==2.2.4 matplotlib pandas scipy h5py testresources scikit-learn
 
 # Expose Tensorboard
 EXPOSE 6006
