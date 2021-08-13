@@ -126,16 +126,14 @@ RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" 
     sudo apt-get clean && sudo rm -rf /usr/local/src/* 
 
 # Install Gazebo
+#install missing rosdep
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
     wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add - && \
     apt-get update && \
     apt-get install -y gazebo9 libgazebo9-dev && \
-    apt-get install -y ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control &&\
+    apt-get install -y ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control python-rosdep &&\
     sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
-
-#install missing rosdep
-RUN apt-get install python-rosdep
 
 # Setup ROS
 #USER $USER
@@ -150,7 +148,8 @@ RUN /bin/bash -c "source ~/.bashrc"
 ###Tensorflow Installation
 # Install pip
 USER root
-RUN apt-get install -y wget python-pip python-dev libgtk2.0-0 unzip libblas-dev liblapack-dev libhdf5-dev && \
+RUN apt-get update && \
+    apt-get install -y  python-pip python-dev libgtk2.0-0 unzip libblas-dev liblapack-dev libhdf5-dev && \
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     python get-pip.py
 
