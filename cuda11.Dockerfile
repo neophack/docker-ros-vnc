@@ -120,8 +120,8 @@ RUN apt-get update && \
 # Install ROS
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list' && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 && \
-    curl http://repo.ros2.org/repos.key | sudo apt-key add - && \
-    apt-get update && apt-get install -y ros-melodic-desktop && \
+    curl https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - && \
+    apt-get update && apt-get install -y ros-melodic-desktop-full && \
     apt-get install -y python-rosinstall  &&\
     sudo apt-get clean && sudo rm -rf /usr/local/src/* 
 
