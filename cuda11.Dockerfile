@@ -16,7 +16,7 @@ RUN apt-get update && \
     curl \
     wget \
     meld \
-    && apt-get clean && rm -rf /usr/local/src/* &&  rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* &&  rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+    && apt-get clean && rm -rf /usr/local/src/* &&  rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/*
 
 # Configure user
 ARG user=ros
@@ -45,13 +45,13 @@ RUN cd /home/$USER/ &&\
     sudo apt-get install -y ./vscode.deb &&\
     sudo rm ./vscode.deb &&\
     sudo rm /etc/apt/sources.list.d/vscode.list &&\
-    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* 
 
 
 RUN sudo apt-get update && \
     sudo apt-get install -y apt-transport-https && \
     sudo apt-get install -y fonts-wqy-microhei ttf-wqy-zenhei &&\
-    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* 
 
 ### VNC Installation
 LABEL io.k8s.description="VNC Container with ROS with Xfce window manager" \
@@ -132,7 +132,7 @@ RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb
     apt-get update && \
     apt-get install -y gazebo9 libgazebo9-dev && \
     apt-get install -y ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control python-rosdep &&\
-    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+    sudo apt-get clean && sudo rm -rf /usr/local/src/* && sudo rm -rf /tmp/* /var/tmp/* $HOME/.cache/* /var/cache/apt/* 
 
 
 # Setup ROS
